@@ -8,6 +8,6 @@ interface RunnerGuard {
     fun toggleActivation()
 
     fun checkRunnability(): Boolean
-
-    fun checkIfAlive()
+    fun checkIfAlive(speed: Float)
+    fun sendHelpNotification()
 }

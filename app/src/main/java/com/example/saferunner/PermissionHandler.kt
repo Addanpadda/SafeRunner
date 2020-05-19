@@ -16,15 +16,19 @@ class PermissionHandler(_activity: Activity) {
         android.Manifest.permission.INTERNET
 //        android.Manifest.permission.ACCESS_BACKGROUND_LOCATION
     )
+    private var gotPermissions: Boolean = false
     private val permissionCode = 1
     private var activity = _activity
 
     fun requirePermissions() {
-        while (checkPermissions() == PackageManager.PERMISSION_DENIED) {
-            Log.d("Debug", "Requiring permissions")
-            ActivityCompat.requestPermissions(activity, permissions, permissionCode)
+        if (!gotPermissions) {
+            while (checkPermissions() == PackageManager.PERMISSION_DENIED) {
+                Log.d("Debug", "Requiring permissions")
+                ActivityCompat.requestPermissions(activity, permissions, permissionCode)
+            }
+            gotPermissions = true
+            Log.d("Debug", "Permissions were satisfied!" + checkPermissions())
         }
-        Log.d("Debug", "Permissions were satisfied!" + checkPermissions())
     }
 
     private fun checkPermissions(): Int {

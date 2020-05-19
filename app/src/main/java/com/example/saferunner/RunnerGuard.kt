@@ -23,19 +23,16 @@ class RunnerGuard(context: Context) : RunnerGuard {
     var gps = GPS(context)
     var setStatus: ((statusText: String, statusType: StatusType)->Unit)? = null
     private val aliveSpeedThreathhold = 0.5
+    var notAliveSpeedCounts = 0
 
     override fun activate() {
         Log.d("RunnerGuard", "Activating...")
 
         if (checkRunnability()) {
+            initializeGPS()
             isActive = true
+            setStatus?.invoke("Successfully started RunnerGuard!", StatusType.INFORMATION)
             Log.d("RunnerGuard", "Activated!")
-
-            //while (isActive) {
-            //var handler = android.os.Handler()
-            //handler.postDelayed({ checkIfAlive() }, 1000)
-            checkIfAlive()
-            //}
         }
     }
 
@@ -49,20 +46,41 @@ class RunnerGuard(context: Context) : RunnerGuard {
         return true
     }
 
+    fun initializeGPS() {
+        gps.initializeGPS()
+        gps.locationListener?.setOnLocationChangeCallbackFun({ location, lastLocation -> checkIfAlive(location.distanceTo(lastLocation)*1000/(location.time - lastLocation!!.time)) })
+    }
+
     override fun deactivate() {
         Log.d("RunnerGuard", "Deactivating...")
         isActive = false
+        // TODO: Need some more here...
     }
 
     override fun toggleActivation() {
         TODO("Not yet implemented")
     }
 
-    override fun checkIfAlive() {
-        if (gps.getSpeed() < aliveSpeedThreathhold) {
-            setStatus?.invoke("Speed: " + gps.getSpeed(), StatusType.INFORMATION) // TODO: INFO (Warning) FOR NOW...
+    override fun checkIfAlive(speed: Float) {
+        if (speed < aliveSpeedThreathhold) {
+            notAliveSpeedCounts++
+            setStatus?.invoke("ALIVE?: " + speed, StatusType.INFORMATION) // TODO: INFO (Warning) FOR NOW...
+        } else if (notAliveSpeedCounts > 0) {
+            notAliveSpeedCounts = 0
+            setStatus?.invoke("", StatusType.INFORMATION)
+        }
+
+        if (notAliveSpeedCounts == 2) {
+            sendHelpNotification()
         }
     }
+
+    override fun sendHelpNotification() {
+        //TODO("Implement this!")
+        setStatus?.invoke("SENDING SMS DUDE!", StatusType.ERROR)
+
+    }
+
     fun setStatusCallback(statusCallback: (statusText: String, statusType: StatusType) -> Unit) {
         setStatus = statusCallback
     }

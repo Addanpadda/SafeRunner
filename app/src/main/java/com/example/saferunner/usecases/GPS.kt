@@ -1,5 +1,7 @@
 package com.example.saferunner.usecases
 
 interface GPS {
-    fun getSpeed(): Float
+    val minIntervalUpdateTimeMs: Long
+
+    fun isGPSEnabled(): Boolean
 }
