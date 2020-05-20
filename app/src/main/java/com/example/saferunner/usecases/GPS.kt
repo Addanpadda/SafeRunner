@@ -4,4 +4,6 @@ interface GPS {
     val minIntervalUpdateTimeMs: Long
 
     fun isGPSEnabled(): Boolean
+    fun initializeGPS()
+    fun freeGPS()
 }

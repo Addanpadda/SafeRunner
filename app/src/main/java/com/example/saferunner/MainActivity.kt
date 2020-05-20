@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 
 // Debugging
 import android.util.Log
+import android.widget.Button
 
 
 class MainActivity : AppCompatActivity() {
@@ -26,23 +27,32 @@ class MainActivity : AppCompatActivity() {
         runnerGuard.setStatusCallback { statusText, statusType -> setStatusText(statusText, statusType) }
     }
 
-    fun setStatusText(statusText: String, statusType: StatusType) {
+    fun toggleRunnerGuard(view: View) {
+        Log.d("DEBUG", "RAN!")
+        runnerGuard.toggleActivation()
+        updateActivateButtonText()
+    }
+
+    private fun updateActivateButtonText() {
+        var buttonText = generateCurrentButtonText()
+        findViewById<Button>(R.id.toggle_guard_button).text = buttonText
+    }
+
+    private fun generateCurrentButtonText(): String = when (runnerGuard.isActive) {
+        true -> getString(R.string.deactivate_runner_guard)
+        false -> getString(R.string.activate_runner_guard)
+    }
+
+    private fun setStatusText(statusText: String, statusType: StatusType) {
         (findViewById<View>(R.id.status_text_view) as TextView).text = statusText
 
         var color = statusTypeToColor(statusType)
         (findViewById<View>(R.id.status_text_view) as TextView).setTextColor(color)
     }
 
-    fun statusTypeToColor(statusType: StatusType): Int {
-        when (statusType) {
-            StatusType.INFORMATION -> return Color.GREEN
-            StatusType.WARNING -> return Color.YELLOW
-            StatusType.ERROR -> return Color.RED
-        }
-    }
-
-    fun toggleRunnerGuard(view: View) {
-        Log.d("DEBUG", "RAN!")
-        runnerGuard.toggleActivation()
+    private fun statusTypeToColor(statusType: StatusType): Int = when (statusType) {
+            StatusType.INFORMATION -> Color.GREEN
+            StatusType.WARNING -> Color.YELLOW
+            StatusType.ERROR -> Color.RED
     }
 }

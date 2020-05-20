@@ -3,4 +3,5 @@
 
     # Simple button strings
     <string name="activate_runner_guard">Activate Guard</string>
+    <string name="deactivate_runner_guard">Deactivate Guard</string>
 </resources>

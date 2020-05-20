@@ -28,14 +28,14 @@ class GPS (context: Context) : GPS {
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
     }
 
-    fun initializeGPS() {
+    override fun initializeGPS() {
         // TODO: Check permissions here!
         locationListener = GPSLocationListener()
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
             minIntervalUpdateTimeMs, 0f, locationListener)
     }
 
-    fun freeGPS() {
+    override fun freeGPS() {
         locationManager.removeUpdates(locationListener)
     }
 }
