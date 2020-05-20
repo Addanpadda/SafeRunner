@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorBackground"
     tools:context=".MainActivity">
 
     <RelativeLayout
@@ -19,10 +20,11 @@
             android:layout_marginTop="120dp"
 
             android:textSize="20sp"
-            android:textAllCaps="true" />
+            android:textAllCaps="true"
+            android:textStyle="bold" />
 
         <Button
-            android:id="@+id/activate_guard_button"
+            android:id="@+id/toggle_guard_button"
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
