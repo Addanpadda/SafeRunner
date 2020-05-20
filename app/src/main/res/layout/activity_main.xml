@@ -29,7 +29,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="200dp"
 
-            android:onClick="activateRunnerGuard"
+            android:onClick="toggleRunnerGuard"
             android:text="@string/activate_runner_guard"
 
             android:textSize="20sp" />

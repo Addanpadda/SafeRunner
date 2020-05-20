@@ -31,7 +31,7 @@ class RunnerGuard(context: Context) : RunnerGuard {
         if (checkRunnability()) {
             initializeGPS()
             isActive = true
-            setStatus?.invoke("Successfully started RunnerGuard!", StatusType.INFORMATION)
+            setStatus?.invoke("Activated Guard", StatusType.INFORMATION)
             Log.d("RunnerGuard", "Activated!")
         }
     }
@@ -54,17 +54,23 @@ class RunnerGuard(context: Context) : RunnerGuard {
     override fun deactivate() {
         Log.d("RunnerGuard", "Deactivating...")
         isActive = false
-        // TODO: Need some more here...
+        // TODO: Check if successful with returning boolean
+        gps.freeGPS()
+        setStatus?.invoke("Deactivated Guard", StatusType.INFORMATION)
     }
 
     override fun toggleActivation() {
-        TODO("Not yet implemented")
+        if (!isActive) {
+            activate()
+        } else {
+            deactivate()
+        }
     }
 
     override fun checkIfAlive(speed: Float) {
         if (speed < aliveSpeedThreathhold) {
             notAliveSpeedCounts++
-            setStatus?.invoke("ALIVE?: " + speed, StatusType.INFORMATION) // TODO: INFO (Warning) FOR NOW...
+            setStatus?.invoke("LOW SPEED: $speed", StatusType.WARNING)
         } else if (notAliveSpeedCounts > 0) {
             notAliveSpeedCounts = 0
             setStatus?.invoke("", StatusType.INFORMATION)
@@ -77,7 +83,7 @@ class RunnerGuard(context: Context) : RunnerGuard {
 
     override fun sendHelpNotification() {
         //TODO("Implement this!")
-        setStatus?.invoke("SENDING SMS DUDE!", StatusType.ERROR)
+        setStatus?.invoke("SENDING SMS!", StatusType.ERROR)
 
     }
 

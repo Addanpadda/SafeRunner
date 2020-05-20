@@ -12,9 +12,7 @@ import android.util.Log
 class PermissionHandler(_activity: Activity) {
     var permissions = arrayOf(
         android.Manifest.permission.ACCESS_COARSE_LOCATION,
-        android.Manifest.permission.ACCESS_FINE_LOCATION,
-        android.Manifest.permission.INTERNET
-//        android.Manifest.permission.ACCESS_BACKGROUND_LOCATION
+        android.Manifest.permission.ACCESS_FINE_LOCATION
     )
     private var gotPermissions: Boolean = false
     private val permissionCode = 1

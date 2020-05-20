@@ -27,17 +27,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun setStatusText(statusText: String, statusType: StatusType) {
-        (findViewById<View>(R.id.status_text_view) as TextView).setText(statusText)
-        when (statusType) {
-            StatusType.ERROR -> (findViewById<View>(R.id.status_text_view) as TextView).setTextColor(
-                Color.RED)
-            StatusType.INFORMATION -> (findViewById<View>(R.id.status_text_view) as TextView).setTextColor(
-                Color.GREEN)
-        } // TODO: Remove these redundant findViewById calls and do not use when
+        (findViewById<View>(R.id.status_text_view) as TextView).text = statusText
+
+        var color = statusTypeToColor(statusType)
+        (findViewById<View>(R.id.status_text_view) as TextView).setTextColor(color)
     }
 
-    fun activateRunnerGuard(view: View) {
+    fun statusTypeToColor(statusType: StatusType): Int {
+        when (statusType) {
+            StatusType.INFORMATION -> return Color.GREEN
+            StatusType.WARNING -> return Color.YELLOW
+            StatusType.ERROR -> return Color.RED
+        }
+    }
+
+    fun toggleRunnerGuard(view: View) {
         Log.d("DEBUG", "RAN!")
-        runnerGuard.activate()
+        runnerGuard.toggleActivation()
     }
 }

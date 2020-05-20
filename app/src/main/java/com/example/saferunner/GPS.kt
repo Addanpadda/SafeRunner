@@ -33,7 +33,10 @@ class GPS (context: Context) : GPS {
         locationListener = GPSLocationListener()
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
             minIntervalUpdateTimeMs, 0f, locationListener)
+    }
 
+    fun freeGPS() {
+        locationManager.removeUpdates(locationListener)
     }
 }
 
