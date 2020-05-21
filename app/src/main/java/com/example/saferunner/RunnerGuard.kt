@@ -4,26 +4,23 @@ package com.example.saferunner
 import com.example.saferunner.usecases.RunnerGuard
 
 // GPS
-import com.example.saferunner.GPS
 
 // Android necessities
-import android.app.Activity
 import android.content.Context
-import android.os.Looper
 
 // StatusType enum class
-import com.example.saferunner.StatusType
 
 // Debug
 import android.util.Log
-import java.util.logging.Handler
 
 class RunnerGuard(context: Context) : RunnerGuard {
-    override var isActive = false
-    var gps = GPS(context)
     var setStatus: ((statusText: String, statusType: StatusType)->Unit)? = null
-    private val aliveSpeedThreathhold = 0.5
-    var notAliveSpeedCounts = 0
+    override var isActive = false
+    private val aliveSpeedThreshold = 0.5 // M/S
+    private var notAliveSpeedCounts = 0
+    private var gps = GPS(context)
+    private var sms = SMS()
+
 
     override fun activate() {
         Log.d("RunnerGuard", "Activating...")
@@ -68,7 +65,7 @@ class RunnerGuard(context: Context) : RunnerGuard {
     }
 
     override fun checkIfAlive(speed: Float) {
-        if (speed < aliveSpeedThreathhold) {
+        if (speed < aliveSpeedThreshold) {
             notAliveSpeedCounts++
             setStatus?.invoke("LOW SPEED: $speed", StatusType.WARNING)
         } else if (notAliveSpeedCounts > 0) {
@@ -82,9 +79,15 @@ class RunnerGuard(context: Context) : RunnerGuard {
     }
 
     override fun sendHelpNotification() {
-        //TODO("Implement this!")
         setStatus?.invoke("SENDING SMS!", StatusType.ERROR)
-
+        sms.sendMassage(
+            "--------------------------------------------\n" +
+                    " My RunnerGuard is calling for help!\n" +
+                    " Try calling me before the ambulance though...\n" +
+                    " Latitude:  ${gps.latitude}\n" +
+                    " Longitude: ${gps.longitude}\n" +
+                    " Maps location: ${gps.googleMapsLocationURL()}\n" +
+                    "--------------------------------------------", arrayOf())
     }
 
     fun setStatusCallback(statusCallback: (statusText: String, statusType: StatusType) -> Unit) {

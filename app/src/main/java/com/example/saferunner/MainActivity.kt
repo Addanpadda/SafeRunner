@@ -28,7 +28,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun toggleRunnerGuard(view: View) {
-        Log.d("DEBUG", "RAN!")
         runnerGuard.toggleActivation()
         updateActivateButtonText()
     }

@@ -9,14 +9,15 @@ import androidx.core.content.ContextCompat
 // Debug
 import android.util.Log
 
-class PermissionHandler(_activity: Activity) {
+class PermissionHandler(activity: Activity) {
     var permissions = arrayOf(
         android.Manifest.permission.ACCESS_COARSE_LOCATION,
-        android.Manifest.permission.ACCESS_FINE_LOCATION
+        android.Manifest.permission.ACCESS_FINE_LOCATION,
+        android.Manifest.permission.SEND_SMS
     )
     private var gotPermissions: Boolean = false
     private val permissionCode = 1
-    private var activity = _activity
+    private var activity = activity
 
     fun requirePermissions() {
         if (!gotPermissions) {
@@ -33,7 +34,7 @@ class PermissionHandler(_activity: Activity) {
         for (permission in permissions) {
             var isMissingPermission = ContextCompat.checkSelfPermission(activity, permission)
 
-            Log.d("DEBUG", "PERMISSION" + permission + isMissingPermission)
+            Log.d("DEBUG", "Permission $permission $isMissingPermission")
             Log.d("GRANTED", PackageManager.PERMISSION_GRANTED.toString())
 
             if (isMissingPermission == PackageManager.PERMISSION_DENIED) {
