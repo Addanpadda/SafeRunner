@@ -14,11 +14,11 @@ import android.util.Log
 
 class GPS (context: Context) : GPS {
     private var locationManager: LocationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-    var speed: Float? = null
+    override var speed: Float? = null
         get() = locationListener?.speed
-    var latitude: Double? = null
+    override var latitude: Double? = null
         get() = locationListener?.latitude
-    var longitude: Double? = null
+    override var longitude: Double? = null
         get() = locationListener?.longitude
 
     // LocationListener's constants
@@ -38,11 +38,11 @@ class GPS (context: Context) : GPS {
         wakeLock.acquire()
         locationListener = GPSLocationListener()
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-            minIntervalUpdateTimeMs, 0f, locationListener)
+            minIntervalUpdateTimeMs, 0f, locationListener!!)
     }
 
     override fun freeGPS() {
-        locationManager.removeUpdates(locationListener)
+        locationManager.removeUpdates(locationListener!!)
         speed = null
         latitude = null
         longitude = null

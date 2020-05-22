@@ -39,9 +39,9 @@ class RunnerGuard(context: Context) : RunnerGuard {
         return true
     }
 
-    fun initializeGPS() {
+    private fun initializeGPS() {
         gps.initializeGPS()
-        gps.locationListener?.setOnLocationChangeCallbackFun({ location, lastLocation -> checkIfAlive(location.distanceTo(lastLocation)*1000/(location.time - lastLocation!!.time)) })
+        gps.locationListener?.setOnLocationChangeCallbackFun({ location, lastLocation -> checkIfAlive(location.distanceTo(lastLocation)*1000/(location.time - lastLocation.time)) })
     }
 
     override fun deactivate() {
