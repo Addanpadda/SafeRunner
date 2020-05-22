@@ -1,14 +1,10 @@
 package com.example.saferunner
 
-// RunnerGuard interface
-import com.example.saferunner.usecases.RunnerGuard
-
-// GPS
-
 // Android necessities
 import android.content.Context
 
-// StatusType enum class
+// RunnerGuard interface
+import com.example.saferunner.usecases.RunnerGuard
 
 // Debug
 import android.util.Log

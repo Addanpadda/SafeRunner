@@ -1,5 +1,6 @@
 package com.example.saferunner
 
+// Android necessities
 import android.telephony.SmsManager
 import android.util.Log
 import com.example.saferunner.usecases.NotificationSystem

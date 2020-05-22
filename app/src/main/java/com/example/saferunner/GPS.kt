@@ -1,23 +1,16 @@
 package com.example.saferunner
 
-// GPS interface
-import android.app.Service
-import com.example.saferunner.usecases.GPS
-
-// Location datastructure
-
-// GPS service
-
-
-// Debug
-import android.util.Log
-
 // Android necessities
 import android.content.Context
 import android.location.*
 import android.os.Bundle
 import android.os.PowerManager
 
+// GPS interface
+import com.example.saferunner.usecases.GPS
+
+// Debug
+import android.util.Log
 
 class GPS (context: Context) : GPS {
     private var locationManager: LocationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
