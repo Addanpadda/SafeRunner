@@ -1,6 +1,7 @@
 package com.example.saferunner
 
 // GPS interface
+import android.app.Service
 import com.example.saferunner.usecases.GPS
 
 // Location datastructure
@@ -15,6 +16,7 @@ import android.util.Log
 import android.content.Context
 import android.location.*
 import android.os.Bundle
+import android.os.PowerManager
 
 
 class GPS (context: Context) : GPS {
@@ -30,12 +32,17 @@ class GPS (context: Context) : GPS {
     override val minIntervalUpdateTimeMs: Long = 10000 // 10 sec
     var locationListener: GPSLocationListener? = null
 
+    // Wakelock for gps in background
+    var powerManager: PowerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+    var wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "RunnerGuard:GPSWakelockTag")
+
     override fun isGPSEnabled(): Boolean {
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
     }
 
     override fun initializeGPS() {
         // TODO: Check permissions here!
+        wakeLock.acquire()
         locationListener = GPSLocationListener()
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
             minIntervalUpdateTimeMs, 0f, locationListener)
@@ -46,6 +53,7 @@ class GPS (context: Context) : GPS {
         speed = null
         latitude = null
         longitude = null
+        wakeLock.release()
     }
 
     fun googleMapsLocationURL(): String {
@@ -70,6 +78,7 @@ class GPSLocationListener : LocationListener {
     var onLocationChangeCallback: ((location: Location, lastLocation: Location) -> Unit)? = null
 
     override fun onLocationChanged(location: Location?) {
+
         if (isProviderEnabled &&
             lastLocation != null
             && location != null) {
@@ -93,16 +102,16 @@ class GPSLocationListener : LocationListener {
     }
 
     override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {
-        TODO("Not yet implemented")
+        Log.d("OnStatusChanged", "Provider: $provider, Status: $status, Extras: $extras")
     }
 
     override fun onProviderEnabled(provider: String?) {
-        TODO("Not yet implemented")
+        //TODO("Not yet implemented")
         isProviderEnabled = true
     }
 
     override fun onProviderDisabled(provider: String?) {
-        TODO("Not yet implemented")
+        //TODO("Not yet implemented")
         isProviderEnabled = false
     }
 

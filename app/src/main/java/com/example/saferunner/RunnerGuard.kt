@@ -80,14 +80,11 @@ class RunnerGuard(context: Context) : RunnerGuard {
 
     override fun sendHelpNotification() {
         setStatus?.invoke("SENDING SMS!", StatusType.ERROR)
+
+        // SMS max length 160 characters
         sms.sendMassage(
-            "--------------------------------------------\n" +
-                    " My RunnerGuard is calling for help!\n" +
-                    " Try calling me before the ambulance though...\n" +
-                    " Latitude:  ${gps.latitude}\n" +
-                    " Longitude: ${gps.longitude}\n" +
-                    " Maps location: ${gps.googleMapsLocationURL()}\n" +
-                    "--------------------------------------------", arrayOf())
+            "My RunnerGuard is calling for help!\n" +
+                    "Maps location: ${gps.googleMapsLocationURL()}", arrayOf("632763276"))
     }
 
     fun setStatusCallback(statusCallback: (statusText: String, statusType: StatusType) -> Unit) {

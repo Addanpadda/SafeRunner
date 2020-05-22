@@ -13,7 +13,8 @@ class PermissionHandler(activity: Activity) {
     var permissions = arrayOf(
         android.Manifest.permission.ACCESS_COARSE_LOCATION,
         android.Manifest.permission.ACCESS_FINE_LOCATION,
-        android.Manifest.permission.SEND_SMS
+        android.Manifest.permission.SEND_SMS,
+        android.Manifest.permission.WAKE_LOCK
     )
     private var gotPermissions: Boolean = false
     private val permissionCode = 1
