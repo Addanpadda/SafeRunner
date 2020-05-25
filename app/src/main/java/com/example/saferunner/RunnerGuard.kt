@@ -9,11 +9,12 @@ import com.example.saferunner.usecases.RunnerGuard
 // Debug
 import android.util.Log
 
+
 class RunnerGuard(context: Context) : RunnerGuard {
     var setStatus: ((statusText: String, statusType: StatusType)->Unit)? = null
     override var isActive = false
     private val aliveSpeedThreshold = 0.5 // M/S
-    private var notAliveSpeedCounts = 0
+    private var notAliveSpeedCount = 0
     private var gps = GPS(context)
     private var sms = SMS()
 
@@ -49,6 +50,7 @@ class RunnerGuard(context: Context) : RunnerGuard {
         isActive = false
         // TODO: Check if successful with returning boolean
         gps.freeGPS()
+        notAliveSpeedCount = 0
         setStatus?.invoke("Deactivated Guard", StatusType.INFORMATION)
     }
 
@@ -62,14 +64,14 @@ class RunnerGuard(context: Context) : RunnerGuard {
 
     override fun checkIfAlive(speed: Float) {
         if (speed < aliveSpeedThreshold) {
-            notAliveSpeedCounts++
+            notAliveSpeedCount++
             setStatus?.invoke("LOW SPEED: $speed", StatusType.WARNING)
-        } else if (notAliveSpeedCounts > 0) {
-            notAliveSpeedCounts = 0
+        } else if (notAliveSpeedCount > 0) {
+            notAliveSpeedCount = 0
             setStatus?.invoke("", StatusType.INFORMATION)
         }
 
-        if (notAliveSpeedCounts == 2) {
+        if (notAliveSpeedCount == 2) {
             sendHelpNotification()
         }
     }
@@ -78,9 +80,10 @@ class RunnerGuard(context: Context) : RunnerGuard {
         setStatus?.invoke("SENDING SMS!", StatusType.ERROR)
 
         // SMS max length 160 characters
+        // TODO: Phone number should be set as a member variable in SMS.
         sms.sendMassage(
             "My RunnerGuard is calling for help!\n" +
-                    "Maps location: ${gps.googleMapsLocationURL()}", arrayOf("632763276"))
+                    "Maps location: ${gps.googleMapsLocationURL()}", arrayOf("666"))
     }
 
     fun setStatusCallback(statusCallback: (statusText: String, statusType: StatusType) -> Unit) {

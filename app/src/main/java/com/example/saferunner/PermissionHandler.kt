@@ -9,7 +9,9 @@ import androidx.core.content.ContextCompat
 // Debug
 import android.util.Log
 
+
 class PermissionHandler(activity: Activity) {
+    // TODO: Pass permissions needed to class
     var permissions = arrayOf(
         android.Manifest.permission.ACCESS_COARSE_LOCATION,
         android.Manifest.permission.ACCESS_FINE_LOCATION,

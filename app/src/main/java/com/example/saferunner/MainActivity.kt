@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 // Debugging
 import android.widget.Button
 
+
 class MainActivity : AppCompatActivity() {
     lateinit var runnerGuard: RunnerGuard
     lateinit var permissionHandler: PermissionHandler

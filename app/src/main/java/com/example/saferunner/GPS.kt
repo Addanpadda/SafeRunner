@@ -88,6 +88,7 @@ class GPSLocationListener : LocationListener {
             longitude = location.longitude
             speed = location.distanceTo(lastLocation)*1000/(location.time - lastLocation!!.time)
 
+            // TODO: Passed new location object with member "speed" set
             onLocationChangeCallback?.invoke(location, lastLocation!!)
         }
 

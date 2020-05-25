@@ -6,6 +6,7 @@ import android.util.Log
 import com.example.saferunner.usecases.MessageSystem
 import java.lang.Exception
 
+
 class SMS : MessageSystem {
     var smsManager: SmsManager = SmsManager.getDefault()
 
