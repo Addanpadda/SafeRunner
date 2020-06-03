@@ -2,6 +2,7 @@ package com.example.saferunner
 
 // Android necessities
 import android.content.Context
+import androidx.preference.PreferenceManager.getDefaultSharedPreferences
 
 // RunnerGuard interface
 import com.example.saferunner.usecases.RunnerGuard
@@ -10,11 +11,12 @@ import com.example.saferunner.usecases.RunnerGuard
 import android.util.Log
 
 
-class RunnerGuard(context: Context) : RunnerGuard {
+class RunnerGuard(var context: Context) : RunnerGuard {
     var setStatus: ((statusText: String, statusType: StatusType)->Unit)? = null
     override var isActive = false
     private val aliveSpeedThreshold = 0.5 // M/S
     private var notAliveSpeedCount = 0
+    private val sharedPreferences = getDefaultSharedPreferences(context)
     private var gps = GPS(context)
     private var sms = SMS()
 
@@ -80,10 +82,11 @@ class RunnerGuard(context: Context) : RunnerGuard {
         setStatus?.invoke("SENDING SMS!", StatusType.ERROR)
 
         // SMS max length 160 characters
-        // TODO: Phone number should be set as a member variable in SMS.
         sms.sendMassage(
             "My RunnerGuard is calling for help!\n" +
-                    "Maps location: ${gps.googleMapsLocationURL()}", arrayOf("666"))
+                    "Maps location: ${gps.googleMapsLocationURL()}", arrayOf(sharedPreferences.getString(
+                    context.getString(R.string.preferences_notification_message_key), "")!!))
+        // TODO: Make getting number safer ^
     }
 
     fun setStatusCallback(statusCallback: (statusText: String, statusType: StatusType) -> Unit) {

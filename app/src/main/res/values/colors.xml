@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Standard colors
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    -->
-
-    <color name="colorPrimary">#565656</color>
-    <color name="colorPrimaryDark">#383838</color>
+    <color name="colorPrimary">#080708</color>
+    <color name="colorPrimaryDark">#080708</color>
     <color name="colorBackground">#d3d3d3</color>
-
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorAccent">#DF2935</color>
 </resources>

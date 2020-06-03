@@ -1,7 +1,20 @@
 <resources>
     <string name="app_name">SafeRunner</string>
 
-    # Simple button strings
+    <!-- Simple button strings -->
     <string name="activate_runner_guard">Activate Guard</string>
     <string name="deactivate_runner_guard">Deactivate Guard</string>
+
+    <!-- String for toolbar menu -->
+    <string name="settings_name">Settings</string>
+    <string name="title_activity_settings">Settings</string>
+    
+    <!-- SharedPreferences notification message receivers key -->
+    <string name="preferences_notification_message_key">notification_message</string>
+
+    <!-- Preference headers -->
+    <string name="help_notification_header">Emergency notification</string>
+
+    <!-- Preference titles -->
+    <string name="receiver_title">Phone number</string>
 </resources>
