@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="maximum_still_time_entries">
+        <item>20 sec</item>
+        <item>30 sec</item>
+        <item>40 sec</item>
+        <item>50 sec</item>
+        <item>60 sec</item>
+        <item>120 sec</item>
+    </string-array>
+
+    <string-array name="maximum_still_time_values">
+        <item>20</item>
+        <item>30</item>
+        <item>40</item>
+        <item>50</item>
+        <item>60</item>
+        <item>120</item>
+    </string-array>
+</resources>

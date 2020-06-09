@@ -11,12 +11,26 @@ import com.example.saferunner.usecases.RunnerGuard
 import android.util.Log
 
 
-class RunnerGuard(var context: Context) : RunnerGuard {
-    var setStatus: ((statusText: String, statusType: StatusType)->Unit)? = null
+class RunnerGuard(context: Context) : RunnerGuard {
+    private var setStatus: ((statusText: String, statusType: StatusType)->Unit)? = null
     override var isActive = false
-    private val aliveSpeedThreshold = 0.5 // M/S
     private var notAliveSpeedCount = 0
     private val sharedPreferences = getDefaultSharedPreferences(context)
+
+    private val helpMessageReceiverKey = context.getString(R.string.preferences_notification_message_key)
+    private val helpMessageReceiver: String?
+        get() =  sharedPreferences.getString(helpMessageReceiverKey, "")
+
+    private val maximumStillTimeKey = context.getString(R.string.preferences_maximum_still_time_key)
+    private val defaultMaximumStillTime = context.getString(R.string.default_maximum_still_time)
+    private val maximumStillTime: Int
+        get() = (sharedPreferences.getString(maximumStillTimeKey, defaultMaximumStillTime)!!.toInt() * 1000 / gps.updateIntervalMs).toInt() // milli-sec to sec
+
+    private val aliveSpeedThresholdKey = context.getString(R.string.preferences_speed_threshold_key)
+    private val defaultAliveSpeedThreshold = context.getString(R.string.default_speed_threshold)
+    private val aliveSpeedThreshold: Float
+        get () = sharedPreferences.getString(aliveSpeedThresholdKey, defaultAliveSpeedThreshold)!!.toFloat()
+
     private var gps = GPS(context)
     private var sms = SMS()
 
@@ -34,12 +48,21 @@ class RunnerGuard(var context: Context) : RunnerGuard {
 
     override fun checkRunnability(): Boolean {
         // TODO: Check for permissions...
+
+        if (!isReceiverInPreferences()) {
+            setStatus?.invoke("No receiver in preferences", StatusType.ERROR)
+            return false
+        }
         if (!gps.isGPSEnabled()) {
             setStatus?.invoke("GPS turned off", StatusType.ERROR)
             return false
         }
 
         return true
+    }
+
+    private fun isReceiverInPreferences(): Boolean {
+        return helpMessageReceiver != ""
     }
 
     private fun initializeGPS() {
@@ -57,10 +80,9 @@ class RunnerGuard(var context: Context) : RunnerGuard {
     }
 
     override fun toggleActivation() {
-        if (!isActive) {
-            activate()
-        } else {
-            deactivate()
+        when(isActive) {
+            true -> deactivate()
+            false -> activate()
         }
     }
 
@@ -72,21 +94,17 @@ class RunnerGuard(var context: Context) : RunnerGuard {
             notAliveSpeedCount = 0
             setStatus?.invoke("", StatusType.INFORMATION)
         }
-
-        if (notAliveSpeedCount == 2) {
-            sendHelpNotification()
-        }
+        Log.d("Wow", maximumStillTime.toString())
+        if (notAliveSpeedCount == maximumStillTime) sendHelpNotification()
     }
 
     override fun sendHelpNotification() {
         setStatus?.invoke("SENDING SMS!", StatusType.ERROR)
 
-        // SMS max length 160 characters
+        // SMS max length is 160 characters
         sms.sendMassage(
             "My RunnerGuard is calling for help!\n" +
-                    "Maps location: ${gps.googleMapsLocationURL()}", arrayOf(sharedPreferences.getString(
-                    context.getString(R.string.preferences_notification_message_key), "")!!))
-        // TODO: Make getting number safer ^
+                    "Maps location: ${gps.googleMapsLocationURL()}", arrayOf(helpMessageReceiver!!))
     }
 
     fun setStatusCallback(statusCallback: (statusText: String, statusType: StatusType) -> Unit) {

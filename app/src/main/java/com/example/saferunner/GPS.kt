@@ -22,7 +22,7 @@ class GPS (context: Context) : GPS {
         get() = locationListener?.longitude
 
     // LocationListener's constants
-    override val minIntervalUpdateTimeMs: Long = 10000 // 10 sec
+    override val updateIntervalMs: Long = 10000 // 10 sec
     var locationListener: GPSLocationListener? = null
 
     // Wakelock for gps in background
@@ -38,7 +38,7 @@ class GPS (context: Context) : GPS {
         wakeLock.acquire()
         locationListener = GPSLocationListener()
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-            minIntervalUpdateTimeMs, 0f, locationListener!!)
+            updateIntervalMs, 0f, locationListener!!)
     }
 
     override fun freeGPS() {

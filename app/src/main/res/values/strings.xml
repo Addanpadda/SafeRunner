@@ -9,12 +9,26 @@
     <string name="settings_name">Settings</string>
     <string name="title_activity_settings">Settings</string>
     
-    <!-- SharedPreferences notification message receivers key -->
+    <!-- SharedPreferences keys -->
     <string name="preferences_notification_message_key">notification_message</string>
+    <string name="preferences_speed_threshold_key">speed_threshold</string>
+    <string name="preferences_maximum_still_time_key">maximum_still_time</string>
 
     <!-- Preference headers -->
     <string name="help_notification_header">Emergency notification</string>
+    <string name="gps_header">GPS</string>
 
     <!-- Preference titles -->
-    <string name="receiver_title">Phone number</string>
+    <string name="receiver_title">Phone Number</string>
+    <string name="speed_threshold_title">Speed Threshold</string>
+    <string name="maximum_still_time_title">Maximum Still Time</string>
+
+    <!-- Preference defaults -->
+    <string name="default_speed_threshold">0.5</string>
+    <string name="default_maximum_still_time">20</string>
+
+    <!-- Preference summaries -->
+    <string name="preference_receiver_summary">Phone number to send a help notification to.</string>
+    <string name="preference_speed_threshold_summary">Minimum allowed speed before sending help notification (in M/S).</string>
+    <string name="preference_maximum_still_time_summary">Maximum time to be able to be under the set speed threshold before the an emergency notification is sent.</string>
 </resources>
