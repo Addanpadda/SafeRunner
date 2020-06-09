@@ -22,7 +22,7 @@ class GPS (context: Context) : GPS {
         get() = locationListener?.longitude
 
     // LocationListener's constants
-    override val minIntervalUpdateTimeMs: Long = 10000 // 10 sec
+    override val updateIntervalMs: Long = 10000 // 10 sec
     var locationListener: GPSLocationListener? = null
 
     // Wakelock for gps in background
@@ -38,7 +38,7 @@ class GPS (context: Context) : GPS {
         wakeLock.acquire()
         locationListener = GPSLocationListener()
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-            minIntervalUpdateTimeMs, 0f, locationListener!!)
+            updateIntervalMs, 0f, locationListener!!)
     }
 
     override fun freeGPS() {
@@ -59,57 +59,58 @@ class GPS (context: Context) : GPS {
     private fun generateGoogleMapsLocationURL(latitude: Double, longitude: Double): String {
         return "https://www.google.com/maps/search/?api=1&query=$latitude,$longitude"
     }
-}
 
-class GPSLocationListener : LocationListener {
-    private var lastLocation: Location? = null
-    private var isProviderEnabled: Boolean = true
-    var latitude: Double = 0.0
-    var longitude: Double = 0.0
-    var speed: Float = 0f
+    
+    class GPSLocationListener : LocationListener {
+        private var lastLocation: Location? = null
+        private var isProviderEnabled: Boolean = true
+        var latitude: Double = 0.0
+        var longitude: Double = 0.0
+        var speed: Float = 0f
 
-    var onLocationChangeCallback: ((location: Location, lastLocation: Location) -> Unit)? = null
+        var onLocationChangeCallback: ((location: Location, lastLocation: Location) -> Unit)? = null
 
-    override fun onLocationChanged(location: Location?) {
+        override fun onLocationChanged(location: Location?) {
 
-        if (isProviderEnabled &&
-            lastLocation != null
-            && location != null) {
-            Log.d("Lat1", location.latitude.toString())
-            Log.d("Long1", location.longitude.toString())
-            Log.d("Lat2", lastLocation!!.latitude.toString())
-            Log.d("Long2", lastLocation!!.longitude.toString())
-            Log.d("DIST", location.distanceTo(lastLocation).toString())
-            Log.d("DELTA", (location.time - lastLocation!!.time).toString())
-            Log.d("SPEED", (location.distanceTo(lastLocation)*1000/(location.time - lastLocation!!.time)).toString())
-            Log.d("SPEED", (location.distanceTo(lastLocation)/((location.time - lastLocation!!.time)/(60*60))).toString())
+            if (isProviderEnabled &&
+                lastLocation != null
+                && location != null) {
+                Log.d("Lat1", location.latitude.toString())
+                Log.d("Long1", location.longitude.toString())
+                Log.d("Lat2", lastLocation!!.latitude.toString())
+                Log.d("Long2", lastLocation!!.longitude.toString())
+                Log.d("DIST", location.distanceTo(lastLocation).toString())
+                Log.d("DELTA", (location.time - lastLocation!!.time).toString())
+                Log.d("SPEED", (location.distanceTo(lastLocation)*1000/(location.time - lastLocation!!.time)).toString())
+                Log.d("SPEED", (location.distanceTo(lastLocation)/((location.time - lastLocation!!.time)/(60*60))).toString())
 
-            latitude = location.latitude
-            longitude = location.longitude
-            speed = location.distanceTo(lastLocation)*1000/(location.time - lastLocation!!.time)
+                latitude = location.latitude
+                longitude = location.longitude
+                speed = location.distanceTo(lastLocation)*1000/(location.time - lastLocation!!.time)
 
-            // TODO: Passed new location object with member "speed" set
-            onLocationChangeCallback?.invoke(location, lastLocation!!)
+                // TODO: Passed new location object with member "speed" set
+                onLocationChangeCallback?.invoke(location, lastLocation!!)
+            }
+
+            lastLocation = location
         }
 
-        lastLocation = location
-    }
+        override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {
+            Log.d("OnStatusChanged", "Provider: $provider, Status: $status, Extras: $extras")
+        }
 
-    override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {
-        Log.d("OnStatusChanged", "Provider: $provider, Status: $status, Extras: $extras")
-    }
+        override fun onProviderEnabled(provider: String?) {
+            //TODO("Not yet implemented")
+            isProviderEnabled = true
+        }
 
-    override fun onProviderEnabled(provider: String?) {
-        //TODO("Not yet implemented")
-        isProviderEnabled = true
-    }
+        override fun onProviderDisabled(provider: String?) {
+            //TODO("Not yet implemented")
+            isProviderEnabled = false
+        }
 
-    override fun onProviderDisabled(provider: String?) {
-        //TODO("Not yet implemented")
-        isProviderEnabled = false
-    }
-
-    fun setOnLocationChangeCallbackFun(callbackFun: (location: Location, lastLocation: Location) -> Unit) {
-        onLocationChangeCallback = callbackFun
+        fun setOnLocationChangeCallbackFun(callbackFun: (location: Location, lastLocation: Location) -> Unit) {
+            onLocationChangeCallback = callbackFun
+        }
     }
 }

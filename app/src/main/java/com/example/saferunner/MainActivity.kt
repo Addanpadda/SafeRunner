@@ -15,8 +15,8 @@ import android.widget.Button
 
 
 class MainActivity : AppCompatActivity() {
-    lateinit var runnerGuard: RunnerGuard
-    lateinit var permissionHandler: PermissionHandler
+    private lateinit var runnerGuard: RunnerGuard
+    private lateinit var permissionHandler: PermissionHandler
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
