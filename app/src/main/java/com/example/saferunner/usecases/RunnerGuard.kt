@@ -1,13 +1,32 @@
 package com.example.saferunner.usecases
 
-interface RunnerGuard {
-    var isActive: Boolean
+import android.location.Location
 
-    fun activate()
-    fun deactivate()
-    fun toggleActivation()
+abstract class RunnerGuard {
+    var isActive: Boolean = false
 
-    fun checkRunnability(): Boolean
-    fun checkIfAlive(speed: Float)
-    fun sendHelpNotification()
+    open fun activate() {
+        if (checkRunnability()) isActive = true
+    }
+
+    open fun deactivate() {
+        isActive = false
+    }
+
+    open fun toggleActivation() {
+        when (isActive) {
+            true -> deactivate()
+            false -> activate()
+        }
+    }
+
+    abstract fun checkRunnability(): Boolean
+
+    fun speedCallback(speed: Float) {
+        if (!checkIfAlive(speed)) sendHelpNotification()
+    }
+
+    abstract fun checkIfAlive(speed: Float): Boolean
+
+    abstract fun sendHelpNotification()
 }

@@ -26,8 +26,8 @@ class GPS (context: Context) : GPS {
     var locationListener: GPSLocationListener? = null
 
     // Wakelock for gps in background
-    var powerManager: PowerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
-    var wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "RunnerGuard:GPSWakelockTag")
+    private var powerManager: PowerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+    private var wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "RunnerGuard:GPSWakelockTag")
 
     override fun isGPSEnabled(): Boolean {
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
@@ -68,7 +68,7 @@ class GPS (context: Context) : GPS {
         var longitude: Double = 0.0
         var speed: Float = 0f
 
-        var onLocationChangeCallback: ((location: Location, lastLocation: Location) -> Unit)? = null
+        var onLocationChangeCallback: ((location: Location) -> Unit)? = null
 
         override fun onLocationChanged(location: Location?) {
 
@@ -88,8 +88,9 @@ class GPS (context: Context) : GPS {
                 longitude = location.longitude
                 speed = location.distanceTo(lastLocation)*1000/(location.time - lastLocation!!.time)
 
-                // TODO: Passed new location object with member "speed" set
-                onLocationChangeCallback?.invoke(location, lastLocation!!)
+                location.speed = speed
+
+                onLocationChangeCallback?.invoke(location)
             }
 
             lastLocation = location
@@ -109,7 +110,7 @@ class GPS (context: Context) : GPS {
             isProviderEnabled = false
         }
 
-        fun setOnLocationChangeCallbackFun(callbackFun: (location: Location, lastLocation: Location) -> Unit) {
+        fun setOnLocationChangeCallbackFun(callbackFun: (location: Location) -> Unit) {
             onLocationChangeCallback = callbackFun
         }
     }

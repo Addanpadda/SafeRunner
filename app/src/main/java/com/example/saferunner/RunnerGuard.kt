@@ -2,6 +2,7 @@ package com.example.saferunner
 
 // Android necessities
 import android.content.Context
+import android.location.Location
 import androidx.preference.PreferenceManager.getDefaultSharedPreferences
 
 // RunnerGuard interface
@@ -11,9 +12,8 @@ import com.example.saferunner.usecases.RunnerGuard
 import android.util.Log
 
 
-class RunnerGuard(context: Context) : RunnerGuard {
+class RunnerGuard(context: Context) : RunnerGuard() {
     private var setStatus: ((statusText: String, statusType: StatusType)->Unit)? = null
-    override var isActive = false
     private var notAliveSpeedCount = 0
     private val sharedPreferences = getDefaultSharedPreferences(context)
 
@@ -67,7 +67,7 @@ class RunnerGuard(context: Context) : RunnerGuard {
 
     private fun initializeGPS() {
         gps.initializeGPS()
-        gps.locationListener?.setOnLocationChangeCallbackFun({ location, lastLocation -> checkIfAlive(location.distanceTo(lastLocation)*1000/(location.time - lastLocation.time)) })
+        gps.locationListener?.setOnLocationChangeCallbackFun({ location -> speedCallback(location.speed) })
     }
 
     override fun deactivate() {
@@ -86,7 +86,7 @@ class RunnerGuard(context: Context) : RunnerGuard {
         }
     }
 
-    override fun checkIfAlive(speed: Float) {
+    override fun checkIfAlive(speed: Float): Boolean {
         if (speed < aliveSpeedThreshold) {
             notAliveSpeedCount++
             setStatus?.invoke("LOW SPEED: $speed", StatusType.WARNING)
@@ -94,8 +94,8 @@ class RunnerGuard(context: Context) : RunnerGuard {
             notAliveSpeedCount = 0
             setStatus?.invoke("", StatusType.INFORMATION)
         }
-        Log.d("Wow", maximumStillTime.toString())
-        if (notAliveSpeedCount == maximumStillTime) sendHelpNotification()
+
+        return notAliveSpeedCount != maximumStillTime
     }
 
     override fun sendHelpNotification() {
