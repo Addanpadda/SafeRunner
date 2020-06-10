@@ -14,6 +14,7 @@ import android.util.Log
 
 class RunnerGuard(context: Context) : RunnerGuard() {
     private var setStatus: ((statusText: String, statusType: StatusType)->Unit)? = null
+
     private var notAliveSpeedCount = 0
     private val sharedPreferences = getDefaultSharedPreferences(context)
 
@@ -96,6 +97,7 @@ class RunnerGuard(context: Context) : RunnerGuard() {
         }
 
         return notAliveSpeedCount != maximumStillTime
+
     }
 
     override fun sendHelpNotification() {
