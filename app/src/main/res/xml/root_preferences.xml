@@ -17,20 +17,27 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory app:title="@string/help_notification_header">
+    <PreferenceCategory app:title="@string/help_notification_header"
+        app:key="@string/preference_category_phone_number">
 
         <EditTextPreference
             app:key="@string/preferences_notification_message_key"
             app:title="@string/receiver_title"
             app:summary="@string/preference_receiver_summary" />
 
-        <ListPreference
-            app:key="@string/preferences_maximum_still_time_key"
-            app:title="@string/maximum_still_time_title"
-            app:entries="@array/maximum_still_time_entries"
-            app:entryValues="@array/maximum_still_time_values"
-            app:summary="@string/preference_maximum_still_time_summary"
-            app:defaultValue="@string/default_maximum_still_time" />
+        <!--
+        <Preference
+            app:key="phone_preference"
+            android:layout="@layout/add_phone_number_preference" />
+        -->
+
+        <Preference
+            app:title="@string/add_phone_number_title"
+            app:key="@string/preference_extra_add_phone_number_key" />
+
+        <Preference
+            app:title="@string/remove_phone_number_title"
+            app:key="@string/preference_extra_remove_phone_number_key" />
 
     </PreferenceCategory>
 
@@ -41,6 +48,14 @@
             app:title="@string/speed_threshold_title"
             app:summary="@string/preference_speed_threshold_summary"
             app:defaultValue="@string/default_speed_threshold" />
+
+        <ListPreference
+            app:key="@string/preferences_maximum_still_time_key"
+            app:title="@string/maximum_still_time_title"
+            app:entries="@array/maximum_still_time_entries"
+            app:entryValues="@array/maximum_still_time_values"
+            app:summary="@string/preference_maximum_still_time_summary"
+            app:defaultValue="@string/default_maximum_still_time" />
 
     </PreferenceCategory>
 

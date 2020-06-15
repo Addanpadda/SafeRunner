@@ -8,11 +8,24 @@
     <!-- String for toolbar menu -->
     <string name="settings_name">Settings</string>
     <string name="title_activity_settings">Settings</string>
-    
-    <!-- SharedPreferences keys -->
+
+    <!-- Preference keys
     <string name="preferences_notification_message_key">notification_message</string>
     <string name="preferences_speed_threshold_key">speed_threshold</string>
     <string name="preferences_maximum_still_time_key">maximum_still_time</string>
+    <string name="preference_extra_add_phone_number_key">extra_add_phone_number_key</string>
+    <string name="preference_extra_remove_phone_number_key">extra_remove_phone_number_key</string>
+    <string name="preference_category_phone_number">preference_category_phone_number</string>
+-->
+    <!-- Preference keys -->
+    <string name="preferences_notification_message_key">notification_message</string>
+    <string name="preferences_speed_threshold_key">speed_threshold</string>
+    <string name="preferences_maximum_still_time_key">maximum_still_time</string>
+    <string name="preference_extra_phone_number_key">extra_phone_number_key</string>
+    <string name="preference_extra_add_phone_number_key">extra_add_phone_number_key</string>
+    <string name="preference_extra_remove_phone_number_key">extra_remove_phone_number_key</string>
+    <string name="preference_category_phone_number">preference_category_phone_number</string>
+
 
     <!-- Preference headers -->
     <string name="help_notification_header">Emergency notification</string>
@@ -22,6 +35,8 @@
     <string name="receiver_title">Phone Number</string>
     <string name="speed_threshold_title">Speed Threshold</string>
     <string name="maximum_still_time_title">Maximum Still Time</string>
+    <string name="add_phone_number_title">Add</string>
+    <string name="remove_phone_number_title">Remove</string>
 
     <!-- Preference defaults -->
     <string name="default_speed_threshold">0.5</string>

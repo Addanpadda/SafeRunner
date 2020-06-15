@@ -17,7 +17,6 @@ class RunnerGuard(context: Context) : RunnerGuard() {
 
     private var notAliveSpeedCount = 0
     private val sharedPreferences = getDefaultSharedPreferences(context)
-
     private val helpMessageReceiverKey = context.getString(R.string.preferences_notification_message_key)
     private val helpMessageReceiver: String?
         get() =  sharedPreferences.getString(helpMessageReceiverKey, "")
@@ -25,7 +24,8 @@ class RunnerGuard(context: Context) : RunnerGuard() {
     private val maximumStillTimeKey = context.getString(R.string.preferences_maximum_still_time_key)
     private val defaultMaximumStillTime = context.getString(R.string.default_maximum_still_time)
     private val maximumStillTime: Int
-        get() = (sharedPreferences.getString(maximumStillTimeKey, defaultMaximumStillTime)!!.toInt() * 1000 / gps.updateIntervalMs).toInt() // milli-sec to sec
+        get() = (sharedPreferences.getString(maximumStillTimeKey, defaultMaximumStillTime)!!.toInt() * 1000 /  // milli-sec to sec
+                gps.updateIntervalMs).toInt()
 
     private val aliveSpeedThresholdKey = context.getString(R.string.preferences_speed_threshold_key)
     private val defaultAliveSpeedThreshold = context.getString(R.string.default_speed_threshold)
@@ -54,7 +54,7 @@ class RunnerGuard(context: Context) : RunnerGuard() {
             setStatus?.invoke("No receiver in preferences", StatusType.ERROR)
             return false
         }
-        if (!gps.isGPSEnabled()) {
+        else if (!gps.isGPSEnabled()) {
             setStatus?.invoke("GPS turned off", StatusType.ERROR)
             return false
         }
